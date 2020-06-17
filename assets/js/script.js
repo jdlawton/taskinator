@@ -85,6 +85,9 @@ var createTaskEl = function(taskDataObj) {
 
     //increase task counter for next unique id
     taskIdCounter++;
+
+    //save tasks to local storage for task persistence
+    saveTasks();
 }
 
 var createTaskActions = function(taskId) {
@@ -162,7 +165,7 @@ var deleteTask = function(taskId) {
     //loop through current tasks array
     for (var i = 0; i < tasks.length; i++) {
         //if tasks[i].id doesn't match the value of taskId, let's keep that task and push it into the new array
-        if (tasks.[i].id !== parseInt(taskId)) {
+        if (tasks[i].id !== parseInt(taskId)) {
             updatedTaskArr.push(tasks[i]);
         }
     }
@@ -174,6 +177,8 @@ var deleteTask = function(taskId) {
     //reassign tasks array to be the same as updatedtaskArr
     tasks = updatedTaskArr;
 
+    //save tasks to local storage for task persistence
+    saveTasks();
 }
 
 var editTask = function(taskId) {
@@ -218,6 +223,9 @@ var completeEditTask = function(taskName, taskType, taskId) {
     //change the button text back to Add Task
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
+
+    //save tasks to local storage for task persistence
+    saveTasks();
 }
 
 var taskStatusChangeHandler = function(event) {
@@ -247,6 +255,9 @@ var taskStatusChangeHandler = function(event) {
             tasks[i].status = statusValue;
         }
     }
+
+    //save tasks to local storage for task persistence
+    saveTasks();
 }
 
 //grabs the data-task-id and stores it in dataTransfer of a dragEvent when a task item is dragged
@@ -294,7 +305,8 @@ var dropTaskHandler = function(event) {
             tasks[i].status = statusSelectEl.value.toLowerCase();
         }
     }
-    console.log(tasks);
+    //save tasks to local storage for task persistence
+    saveTasks();
 }
 
 var dragLeaveHandler = function(event) {
@@ -302,6 +314,10 @@ var dragLeaveHandler = function(event) {
     if (taskListEl) {
         taskListEl.removeAttribute("style");
     }
+}
+
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 //event listeners
