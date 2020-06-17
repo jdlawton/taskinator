@@ -167,6 +167,10 @@ var deleteTask = function(taskId) {
         }
     }
 
+    //NOTE: When first adding tasks to the array, the tasks array index will match the id of the task items. As tasks are deleted, however
+    //this can change. The array index and task id do not need to match because the index is not ever used to identify a task and the task id is never
+    //used for anything related to iterating through the array.
+
     //reassign tasks array to be the same as updatedtaskArr
     tasks = updatedTaskArr;
 
