@@ -323,8 +323,9 @@ var saveTasks = function() {
 var loadTasks = function() {
     //1. gets task items from localStorage
     //2. convert tasks from the stringified format back into an array of objects
-    //3. iterat through tasks array and create task elements on the page from array info
+    //3. iterateS through tasks array and create task elements on the page from array info
 
+    /*==================================================ORIGINAL CODE===========================================================================
     //load the tasks back from localStorage, they will be JSON strings
     tasks = localStorage.getItem("tasks");
     //check to see if tasks is null (nothing loaded), if tasks is null, make it an empty array and return out of this function.
@@ -370,6 +371,20 @@ var loadTasks = function() {
         }
         taskIdCounter++;
         console.log(listItemEl);
+    }
+    ================================================================END ORIGINAL CODE===============================================================*/
+    //tasks = localStorage.getItem("tasks");
+    var savedTasks = localStorage.getItem("tasks");
+
+    if (!savedTasks) {
+        return false;
+    }
+
+    savedTasks = JSON.parse(savedTasks);
+    //loop through savedTasks array
+    for (var i = 0; i < savedTasks.length; i++) {
+        //pass each task object into the createTaskEL() function
+        createTaskEl(savedTasks[i]);
     }
 
 }
