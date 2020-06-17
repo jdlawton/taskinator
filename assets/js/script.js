@@ -81,8 +81,24 @@ var createTaskEl = function(taskDataObj) {
     listItemEl.appendChild(taskActionsEl);
 
     // append the <li> to the <ul>
-    tasksToDoEl.appendChild(listItemEl);
-
+    //if the status is "to do" append to tasksToDoEl
+    //if the status is "in progress" append to tasksInProgressEl
+    //if the status is "completed" append to the tasksCompletedEl
+    //console.log(taskDataObj);
+    var statusSelectEl = listItemEl.querySelector("select[name='status-change']");
+    if (taskDataObj.status === "to do"){
+        statusSelectEl.selectedIndex = 0;
+        tasksToDoEl.appendChild(listItemEl);
+    }
+    else if (taskDataObj.status === "in progress") {
+        statusSelectEl.selectedIndex = 1;
+        tasksInProgressEl.appendChild(listItemEl);
+    }
+    else if (taskDataObj.status === "completed") {
+        statusSelectEl.selectedIndex = 2;
+        tasksCompletedEl.appendChild(listItemEl);
+    }
+    
     //increase task counter for next unique id
     taskIdCounter++;
 
