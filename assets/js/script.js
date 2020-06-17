@@ -320,6 +320,60 @@ var saveTasks = function() {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+var loadTasks = function() {
+    //1. gets task items from localStorage
+    //2. convert tasks from the stringified format back into an array of objects
+    //3. iterat through tasks array and create task elements on the page from array info
+
+    //load the tasks back from localStorage, they will be JSON strings
+    tasks = localStorage.getItem("tasks");
+    //check to see if tasks is null (nothing loaded), if tasks is null, make it an empty array and return out of this function.
+    if (tasks === null) {
+        tasks = [];
+        return false;
+    }
+    //if we pulled data from localStorage, parse it back into our array of objects.
+    tasks = JSON.parse(tasks);
+
+    //loop through the tasks array and recreate the visible task items according to the data stored in the array.
+    for (i = 0; i < tasks.length; i++) {
+        tasks[i].id = taskIdCounter;
+        
+        //create the <li> items, add a class and set the task-id and draggable attributes
+        var listItemEl = document.createElement("li");
+        listItemEl.className = "task-item";
+        listItemEl.setAttribute("data-task-id", tasks[i].id);
+        listItemEl.setAttribute("draggable", "true");
+
+        //create the <div> that holds the <li>'s children elements, assign a class and form its innerHTML, append it to the <li>
+        var taskInfoEl = document.createElement("div");
+        taskInfoEl.className = "task-info";
+        taskInfoEl.innerHTML = "<h3 class='task-name'>" + tasks[i].name + "</h3><span class='task-type'>" + tasks[i].type + "</span>";
+        listItemEl.appendChild(taskInfoEl);
+
+        //call the createTaskActions function to add the Edit, Delete and dropdown on the task item, append them to the <li> element
+        var taskActionsEl = createTaskActions(tasks[i].id);
+        listItemEl.appendChild(taskActionsEl);
+
+        //assign the drop down status based on tasks[i].status. this will also put the task item in the correct task list (column).
+        if (tasks[i].status === "to do") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 0;
+            tasksToDoEl.appendChild(listItemEl);
+        }
+        else if (tasks[i].status === "in progress") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 1
+            tasksInProgressEl.appendChild(listItemEl);
+        }
+        else if (tasks[i].status === "complete") {
+            listItemEl.querySelector("select[name='status-change']").selectedIndex = 2;
+            tasksCompletedEl.appendChild(listItemEl);
+        }
+        taskIdCounter++;
+        console.log(listItemEl);
+    }
+
+}
+
 //event listeners
 formEl.addEventListener("submit", taskFormHandler);
 pageContentEl.addEventListener("click", taskButtonHandler);
@@ -328,3 +382,5 @@ pageContentEl.addEventListener("dragstart", dragTaskHandler);
 pageContentEl.addEventListener("dragover", dropZoneDragHandler);
 pageContentEl.addEventListener("drop", dropTaskHandler);
 pageContentEl.addEventListener("dragleave", dragLeaveHandler);
+
+loadTasks();
